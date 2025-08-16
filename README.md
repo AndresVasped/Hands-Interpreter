@@ -11,19 +11,14 @@ nuestro programa se basa es un lector de lenguaje de señar, esto permite:
 
 El diseño del sistema se apoya en **patrones de diseño de software**, lo que garantiza **mantenibilidad, extensibilidad y claridad** del código. Entre ellos:
 
-1. **Patrón MVC (Modelo - Vista - Controlador)**  
-   - **Modelo:** gestiona los datos de las coordenadas de los dedos y el reconocimiento de letras.  
-   - **Vista:** muestra la cámara en tiempo real y los resultados de las detecciones.  
-   - **Controlador:** conecta la lógica de detección con la interfaz gráfica.  
-
-2. **Patrón Strategy**  
+1. **Patrón Strategy**  
    - Se emplea para manejar distintas formas de reconocimiento (ej. letras actuales, en un futuro números o palabras).  
    - Permite cambiar el algoritmo de reconocimiento sin modificar el resto del sistema.  
 
-3. **Patrón Singleton**  
+2. **Patrón Singleton**  
    - Se utiliza en la clase que maneja la cámara, asegurando que solo exista **una única instancia activa** controlando el video.  
 
-4. **Patrón Observer**  
+3. **Patrón Observer**  
    - La vista se suscribe a los cambios del reconocimiento, actualizándose automáticamente cuando se detecta una nueva letra.  
 
 ---
@@ -54,11 +49,22 @@ El diseño del sistema se apoya en **patrones de diseño de software**, lo que g
 - Base de datos personalizada para ampliar el vocabulario reconocido.  
 
 ---
+##  Requisitos del Sistema
 
-## 📷 Ejemplo de Uso
-
-1. Ejecutar el programa.  
-2. Colocar las manos frente a la cámara.  
-3. El sistema detectará la posición de los dedos y mostrará en pantalla la letra correspondiente en tiempo real.  
+- **Python:** versión **3.11.2** o superior.  
+- **Librerías necesarias:**  
+  - OpenCV  
+  - MediaPipe  
+  - TensorFlow  
+  - Keras  
+  - NumPy  
+  - Pandas  
 
 ---
+
+## ▶️ Ejecución del Programa
+
+Para iniciar el programa, usar el siguiente comando en la terminal:
+
+```bash
+python -m src.main.main
