@@ -1,5 +1,5 @@
 # Hands Interpreter
-nuestro programa se basa es un lector de lenguaje de señar, esto permite:
+nuestro programa se basa en un lector de lenguaje de señas, esto permite:
 
 - Reconocer en tiempo real las letras que el usuario realiza con sus manos.  
 - Mostrar los resultados de forma intuitiva en pantalla.  
