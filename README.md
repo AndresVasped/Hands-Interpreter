@@ -18,8 +18,8 @@ El diseño del sistema se apoya en **patrones de diseño de software**, lo que g
 2. **Patrón Singleton**  
    - Se utiliza en la clase que maneja la cámara, asegurando que solo exista **una única instancia activa** controlando el video.  
 
-3. **Patrón Observer**  
-   - La vista se suscribe a los cambios del reconocimiento, actualizándose automáticamente cuando se detecta una nueva letra.  
+3. **Patrón Factory**  
+   - Permirte la creacion de distintos objetos que interactuan entre si.  
 
 ---
 
