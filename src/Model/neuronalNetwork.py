@@ -68,7 +68,7 @@ class ModelHands:
                 metrics=['accuracy'])
         
         model.summary()
-        #le decimos al modelo que revise el dataset 10 veces 
+        #le decimos al modelo que revise el dataset 100 veces 
         history=model.fit(X_train,y_train,epochs=100, batch_size=32,validation_data=(X_test, y_test),verbose=1,callbacks=[
                 keras.callbacks.EarlyStopping(
                     patience=15,           # Parar si no mejora en 15 épocas
@@ -90,35 +90,35 @@ class ModelHands:
         with open("scaler.pkl", 'wb') as f:
             pickle.dump(scaler, f)
 
-        plot_training_history(history)
+        self.plot_training_history(history)
 
-def plot_training_history(self,history):
-    """
-    Grafica la historia del entrenamiento
-    """
-    
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-    
-    # Precisión
-    ax1.plot(history.history['accuracy'], label='Entrenamiento')
-    ax1.plot(history.history['val_accuracy'], label='Validación')
-    ax1.set_title('Precisión del Modelo')
-    ax1.set_xlabel('Época')
-    ax1.set_ylabel('Precisión')
-    ax1.legend()
-    ax1.grid(True)
-    
-    # Pérdida
-    ax2.plot(history.history['loss'], label='Entrenamiento')
-    ax2.plot(history.history['val_loss'], label='Validación')
-    ax2.set_title('Pérdida del Modelo')
-    ax2.set_xlabel('Época')
-    ax2.set_ylabel('Pérdida')
-    ax2.legend()
-    ax2.grid(True)
-    
-    plt.tight_layout()
-    plt.show()
+    def plot_training_history(self,history):
+        """
+        Grafica la historia del entrenamiento
+        """
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+        
+        # Precisión
+        ax1.plot(history.history['accuracy'], label='Entrenamiento')
+        ax1.plot(history.history['val_accuracy'], label='Validación')
+        ax1.set_title('Precisión del Modelo')
+        ax1.set_xlabel('Época')
+        ax1.set_ylabel('Precisión')
+        ax1.legend()
+        ax1.grid(True)
+        
+        # Pérdida
+        ax2.plot(history.history['loss'], label='Entrenamiento')
+        ax2.plot(history.history['val_loss'], label='Validación')
+        ax2.set_title('Pérdida del Modelo')
+        ax2.set_xlabel('Época')
+        ax2.set_ylabel('Pérdida')
+        ax2.legend()
+        ax2.grid(True)
+        
+        plt.tight_layout()
+        plt.show()
 
 if __name__=="__main__":
     modelo=ModelHands()

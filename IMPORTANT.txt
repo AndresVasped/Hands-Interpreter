@@ -1,0 +1,24 @@
+código para recordar como será el Main
+
+class Main:
+    def __init__(self):
+        # Inicializa todas las dependencias
+        self.camera = CameraManager()
+        self.dataset = DatasetManager(path="dataset/")
+        self.model = TFModel(self.dataset)  # Inyectamos DatasetManager
+        self.mediapipe = MediaPipeProcessor(self.camera)  # Inyectamos CameraManager
+
+    def run(self):
+        while True:
+            frame = self.camera.get_frame()
+            keypoints = self.mediapipe.process_frame(frame)
+            prediction = self.model.predict(keypoints)
+            print(prediction)
+
+este código el cual será el main del programa se encargara de correr el programa e inicializar el sistema
+en el Main instanciarems todas las clases y a su vez llamaremos a la cámara y los modelos de predicción, etc.
+
+	OJO para cumplir un buen sistema de SOLID es importante tener en cuenta que si una clase necesita instanciar a otra pero solo un método de esta, por ejemplo CV2 necesita de la clase TFmodel la letra, simplemente necesitaríamos un callback para llamar únicamente a ese método y no a toda la clase
+
+
+python -m src.main.main

@@ -12,7 +12,9 @@ class Main:
         ##codigo para correr el programa llamando a la clase cameraManager
         print("corriendo...")
         try:
+            ##este codigo va crear una instancia para entrenar al modelo
             #self.deteccionManos.getCoordinatesInImages()
+            #"""""
             while True:
                 
                 frame=self.camera.getFrame()
@@ -29,8 +31,10 @@ class Main:
 
                 if self.camera.quitCamera():#cerramos la camara
                     break
+            #"""""
         finally:
             self.camera.release()
             self.deteccionManos.release()
+            print("Acabo...")
             
             

@@ -47,14 +47,14 @@ class MediapipeManager():
                 cv2.rectangle(frame, (xmin-40, ymin-40), (xmax+40, ymax+40), (0, 255, 0), 2)
                 
                 #recortamos la imagen
-                hand_img = frame[ymin-40:ymax+40, xmin-40:xmax+40]
-                
+                #hand_img = frame[ymin-40:ymax+40, xmin-40:xmax+40]
+                #"""""
                 result=self.getPrediction(hand_landmarks)
                 if result[0] is not None:
                     letra,confidence=result
                     print(f"Predicción: {letra} ({confidence:.1%})")
-
-                cv2.imshow("Recorte",hand_img)
+                #"""""
+                #cv2.imshow("Recorte",hand_img)
 
                 #sistema de recoleccion de datos
                 #svds=SaveInDs()
@@ -92,13 +92,22 @@ class MediapipeManager():
 
         if len(landmarks)==63:
             scaler=self.load_scaler()
+            if scaler is None:
+                return None, 0.0
+            
             landmarks_scaled = scaler.transform([landmarks])
             #predecimos el modelo
-            prediction=self.model.predict(landmarks_scaled,verbose=0)
-            predictClass=np.argmax(prediction[0])
-            confidence=np.max(prediction[0])
+            try:
+                prediction=self.model.predict(landmarks_scaled,verbose=0)
+            except Exception as e:
+                print ("Error prediccion:",e)
+                return None, 0.0
+            
+            pred = prediction[0]
+            predictClass = int(np.argmax(pred))
+            confidence = float(np.max(pred))
 
-            letters=['A','B']
+            letters=['A','B','C','D','H','L','O']
             return letters[predictClass], confidence
         
         return None,0.0
@@ -110,13 +119,13 @@ class MediapipeManager():
     def getCoordinatesInImages(self):
         coordinates=[]
         labels=[]
-        letterToNumber={'A':0,'B':1}
+        letterToNumber={'A':0,'B':1,'C':2,'D':3,'H':4,'L':5,'O':6}
 
         path=os.path.normpath(os.path.join(os.path.dirname(__file__), "../../data/dataset"))
         self.manos=self.mp_hands.Hands(static_image_mode=True,min_detection_confidence=0.7)
         
         #recorremos las carpetas
-        for letter in ['A','B']:
+        for letter in ['A','B','C','D','H','L','O']:
             completePath=os.path.join(path,letter)
             if not os.path.exists(completePath):#si la carpeta no existe
                 print("No existe esa ubicacion ",completePath)
