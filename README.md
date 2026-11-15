@@ -1,38 +1,48 @@
+@@ -1,15 +1,23 @@
 # 🤟 Hands Interpreter: Real-Time Sign Language Recognition
+![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green.svg)
+![MediaPipe](https://img.shields.io/badge/MediaPipe-Google-blueviolet.svg)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-Keras-orange.svg)
+![PyTest](https://img.shields.io/badge/PyTest-passing-brightgreen.svg)
+![Semgrep](https://img.shields.io/badge/Semgrep-Secured-blue.svg)
+![LoadTesting](https://img.shields.io/badge/Latency-3.14ms-yellow.svg)
 
-![Python](https://shields.io)
-![OpenCV](https://shields.io)
-![MediaPipe](https://shields.io)
-![TensorFlow](https://shields.io)
-![PyTest](https://shields.io)
-![Semgrep](https://shields.io)
+> **Note:** Insert your real-time recognition demo GIF here.
+> `![Demo](assets/demo.gif)`
 
 **HOLA**
-https://github.com
+https://github.com/user-attachments/assets/bdd94047-a504-436d-b7b2-a99418691a73
+
 
 **ABCD**
-https://github.com
+https://github.com/user-attachments/assets/016cb20e-370e-4ca3-b722-e7a9b3cb5f61
 
-Intérprete de lenguaje de señas en tiempo real desarrollado en Python mediante Visión por Computador. El sistema utiliza **MediaPipe** para extraer 21 puntos clave de la mano y un modelo secuencial de **TensorFlow/Keras** (`hand_model.keras`) para clasificar gestos del alfabeto con una arquitectura basada en patrones de diseño (Estrategia, Singleton y Fábrica).
 
-## 🏗 Arquitectura y Pipeline de ML
-1. **Captura y Extracción:** OpenCV procesa el video de la cámara web y MediaPipe extrae 63 coordenadas espaciales (X, Y, Z).
-2. **Inferencia:** Las coordenadas normalizadas pasan por una red neuronal densa entrenada con un dataset personalizado.
-3. **Pruebas y Seguridad:** Incluye validación mediante PyTest, pruebas de carga estables (latencia promedio de 3.14ms) y análisis estático con Semgrep.
 
-## 🚀 Uso y Requisitos
 
-- **Requisitos:** Python 3.11.2+ y un entorno virtual recomendado.
-- **Instalación:**
-  ```bash
-  git clone https://github.com
-  cd Hands-Interpreter
-  python -m venv venv
-  source venv/Scripts/activate  # En Windows: venv\Scripts\activate
-  pip install -r requirements.txt
-  ```
-- **Ejecución:**
-  ```bash
-  python -m src.main.main
-  ```
+Our program is a real-time sign language interpreter built with Python and Computer Vision. This project allows users to:
+* **Recognize real-time hand gestures** representing letters of the alphabet.
+@@ -104,14 +112,14 @@ source venv/Scripts/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies (Requires a requirements.txt file)
+pip install -r requirements.txt
+
+
+```
+## ▶️ Execution
+
+To iniciate the program, copy this code to the root terminal
+
+```bash
+python -m src.main.main
+```
+
+## 📈 Roadmap & Future Improvements
+
+- [ ] Implementation of full word and phrase recognition.
+- [ ] Integration with a **Text-to-Speech (TTS)** synthesizer.
+- [ ] Cross-platform mobile application port.
+- [ ] UI/UX improvements for the custom dataset generation tool.
+```
 
