@@ -1,70 +1,38 @@
-# Hands Interpreter
-nuestro programa se basa en un lector de lenguaje de señas, esto permite:
+# 🤟 Hands Interpreter: Real-Time Sign Language Recognition
 
-- Reconocer en tiempo real las letras que el usuario realiza con sus manos.  
-- Mostrar los resultados de forma intuitiva en pantalla.  
-- Servir como base para futuras aplicaciones educativas e inclusivas.  
+![Python](https://shields.io)
+![OpenCV](https://shields.io)
+![MediaPipe](https://shields.io)
+![TensorFlow](https://shields.io)
+![PyTest](https://shields.io)
+![Semgrep](https://shields.io)
 
----
+**HOLA**
+https://github.com
 
-## 🧩 Patrones de Diseño Utilizados
+**ABCD**
+https://github.com
 
-El diseño del sistema se apoya en **patrones de diseño de software**, lo que garantiza **mantenibilidad, extensibilidad y claridad** del código. Entre ellos:
+Intérprete de lenguaje de señas en tiempo real desarrollado en Python mediante Visión por Computador. El sistema utiliza **MediaPipe** para extraer 21 puntos clave de la mano y un modelo secuencial de **TensorFlow/Keras** (`hand_model.keras`) para clasificar gestos del alfabeto con una arquitectura basada en patrones de diseño (Estrategia, Singleton y Fábrica).
 
-1. **Patrón Strategy**  
-   - Se emplea para manejar distintas formas de reconocimiento (ej. letras actuales, en un futuro números o palabras).  
-   - Permite cambiar el algoritmo de reconocimiento sin modificar el resto del sistema.  
+## 🏗 Arquitectura y Pipeline de ML
+1. **Captura y Extracción:** OpenCV procesa el video de la cámara web y MediaPipe extrae 63 coordenadas espaciales (X, Y, Z).
+2. **Inferencia:** Las coordenadas normalizadas pasan por una red neuronal densa entrenada con un dataset personalizado.
+3. **Pruebas y Seguridad:** Incluye validación mediante PyTest, pruebas de carga estables (latencia promedio de 3.14ms) y análisis estático con Semgrep.
 
-2. **Patrón Singleton**  
-   - Se utiliza en la clase que maneja la cámara, asegurando que solo exista **una única instancia activa** controlando el video.  
+## 🚀 Uso y Requisitos
 
-3. **Patrón Observer**  
-   - La vista se suscribe a los cambios del reconocimiento, actualizándose automáticamente cuando se detecta una nueva letra.  
+- **Requisitos:** Python 3.11.2+ y un entorno virtual recomendado.
+- **Instalación:**
+  ```bash
+  git clone https://github.com
+  cd Hands-Interpreter
+  python -m venv venv
+  source venv/Scripts/activate  # En Windows: venv\Scripts\activate
+  pip install -r requirements.txt
+  ```
+- **Ejecución:**
+  ```bash
+  python -m src.main.main
+  ```
 
----
-
-## 🚀 Usos y Aplicaciones
-
-- **Educación inclusiva:** apoyo a personas que deseen aprender el lenguaje de señas.  
-- **Comunicación asistida:** servir como base para sistemas que traduzcan señas a texto o voz.  
-- **Investigación:** aplicación en proyectos de accesibilidad y visión artificial.  
-- **Práctica personal:** herramienta para estudiantes de lengua de señas que quieran validar sus gestos.  
-
----
-
-## ⚙️ Tecnologías Utilizadas
-
-- **Python** como lenguaje principal.  
-- **OpenCV** para el manejo de la cámara y procesamiento de imágenes.  
-- **MediaPipe** para la detección de manos y obtención de puntos clave.  
-- **Numpy / Matplotlib** (opcional) para cálculos y visualizaciones.  
-
----
-
-## 📈 Futuras Mejoras
-
-- Reconocimiento de palabras y frases completas.  
-- Integración con un sistema de **síntesis de voz**.  
-- Creación de una aplicación móvil multiplataforma.  
-- Base de datos personalizada para ampliar el vocabulario reconocido.  
-
----
-##  Requisitos del Sistema
-
-- **Python:** versión **3.11.2** o superior.  
-- **Librerías necesarias:**  
-  - OpenCV  
-  - MediaPipe  
-  - TensorFlow  
-  - Keras  
-  - NumPy  
-  - Pandas  
-
----
-
-## ▶️ Ejecución del Programa
-
-Para iniciar el programa, usar el siguiente comando en la terminal:
-
-```bash
-python -m src.main.main
