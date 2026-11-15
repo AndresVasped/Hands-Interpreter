@@ -6,10 +6,16 @@
 ![PyTest](https://img.shields.io/badge/PyTest-passing-brightgreen.svg)
 ![Semgrep](https://img.shields.io/badge/Semgrep-Secured-blue.svg)
 ![LoadTesting](https://img.shields.io/badge/Latency-3.14ms-yellow.svg)
+
+
 **HOLA**
 https://github.com/user-attachments/assets/bdd94047-a504-436d-b7b2-a99418691a73
+
+
 **ABCD**
 https://github.com/user-attachments/assets/016cb20e-370e-4ca3-b722-e7a9b3cb5f61
+
+
 Our program is a real-time sign language interpreter built with Python and Computer Vision. This project allows users to:
 * **Recognize real-time hand gestures** representing letters of the alphabet.
 * **Display results intuitively** on the screen overlay.
