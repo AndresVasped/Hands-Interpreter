@@ -17,6 +17,7 @@ class MediapipeManager():
         self.manos=self.mp_hands.Hands(static_image_mode=False,max_num_hands=1,min_detection_confidence=0.5)#iniciamos el modelo de las manos
         
         self.model=tf.keras.models.load_model(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../hand_model.keras")))
+        self.scaler = self.load_scaler()
 
     def processFrame(self,frame):
         #convertimos a rgb
@@ -91,11 +92,11 @@ class MediapipeManager():
             landmarks.extend([landmark.x, landmark.y, landmark.z])
 
         if len(landmarks)==63:
-            scaler=self.load_scaler()
-            if scaler is None:
+            #scaler=self.load_scaler()
+            if self.scaler is None:
                 return None, 0.0
             
-            landmarks_scaled = scaler.transform([landmarks])
+            landmarks_scaled = self.scaler.transform([landmarks])
             #predecimos el modelo
             try:
                 prediction=self.model.predict(landmarks_scaled,verbose=0)
