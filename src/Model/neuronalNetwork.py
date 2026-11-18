@@ -7,6 +7,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
+import seaborn as sns
 
 class ModelHands:
     def __init__(self):
@@ -21,6 +23,7 @@ class ModelHands:
         #convertimos las listas a arreglos numpy
         X=np.array(coordinates,dtype=np.float32)
         y=np.array(labels,dtype=np.int32)
+        self.plot_eda(y)
         print(f"   X shape: {X.shape}")  # (n_samples, 63)
         print(f"   y shape: {y.shape}")
 
@@ -46,6 +49,10 @@ class ModelHands:
         
         X_train, X_test, y_train, y_test,num_classes,scaler=self.getDataSet(coordinates,labels)
 
+        X_train, y_train = self.augment_data(X_train, y_train)
+
+        #modelo secuenquial
+        """""
         #modelo de la red neuronal
         model= keras.Sequential([
             # Capa de entrada
@@ -60,8 +67,35 @@ class ModelHands:
             #capa de salida
             layers.Dense(num_classes, activation='softmax')
         ])
+        """
+        #CNN
+        inputs = layers.Input(shape=(63,))
+        # Convertimos el vector plano de 63 en una secuencia espacial de 21 puntos con 3 ejes (x, y, z)
+        x = layers.Reshape((21, 3))(inputs)
 
-        
+        # Bloque Convolucional 1
+        x = layers.Conv1D(filters=64, kernel_size=3, padding='same', activation='relu')(x)
+        x = layers.BatchNormalization()(x)
+        x = layers.MaxPooling1D(pool_size=2)(x)
+        x = layers.Dropout(0.25)(x)
+
+        # Bloque Convolucional 2 con Conexión Residual (Técnica avanzada para Nivel 5)
+        shortcut = layers.Conv1D(filters=128, kernel_size=1, padding='same')(x)
+        x = layers.Conv1D(filters=128, kernel_size=3, padding='same', activation='relu')(x)
+        x = layers.BatchNormalization()(x)
+        x = layers.Conv1D(filters=128, kernel_size=3, padding='same')(x)
+        x = layers.Add()([x, shortcut]) # Conexión residual (Skip connection)
+        x = layers.Activation('relu')(x)
+        x = layers.GlobalAveragePooling1D()(x)
+
+        # Clasificador Denso Final
+        x = layers.Dense(64, activation='relu')(x)
+        x = layers.BatchNormalization()(x)
+        x = layers.Dropout(0.3)(x)
+        outputs = layers.Dense(num_classes, activation='softmax')(x)
+
+        model = keras.Model(inputs=inputs, outputs=outputs)
+
         #parametros de entrenamiento del modelo
         model.compile(optimizer='adam',
                 loss='categorical_crossentropy',
@@ -91,6 +125,7 @@ class ModelHands:
             pickle.dump(scaler, f)
 
         self.plot_training_history(history)
+        self.evaluate_model(model, X_test, y_test, num_classes)
 
     def plot_training_history(self,history):
         """
@@ -117,6 +152,72 @@ class ModelHands:
         ax2.legend()
         ax2.grid(True)
         
+        plt.tight_layout()
+        plt.show()
+
+    def plot_eda(self, y):
+        """Genera gráfico de distribución de clases para el Análisis Exploratorio (Criterio 1)"""
+        letters = ['A', 'B', 'C', 'D', 'H', 'L', 'O']
+        unique, counts = np.unique(y, return_counts=True)
+        
+        plt.figure(figsize=(8, 4))
+        plt.bar([letters[i] for i in unique], counts, color='teal', edgecolor='black')
+        plt.title('Distribución de Muestras por Letra (EDA)')
+        plt.xlabel('Letra')
+        plt.ylabel('Cantidad de Imágenes / Landmarks')
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        plt.show()
+
+    def augment_data(self, X_train, y_train):
+        """Aumento de datos (Data Augmentation) inyectando ruido gaussiano y escalado a los landmarks (Criterio 1)"""
+        # 1. Ruido gaussiano (simula temblor o variaciones en la detección de MediaPipe)
+        noise = np.random.normal(0, 0.03, X_train.shape).astype(np.float32)
+        X_noisy = X_train + noise
+        
+        # 2. Escalado leve (simula mano más cerca o más lejos de la cámara)
+        scale = np.random.uniform(0.9, 1.1, (X_train.shape[0], 1)).astype(np.float32)
+        X_scaled = X_train * scale
+        
+        X_aug = np.vstack([X_train, X_noisy, X_scaled])
+        y_aug = np.vstack([y_train, y_train, y_train])
+        print(f"Datos de entrenamiento aumentados de {len(X_train)} a {len(X_aug)} muestras.")
+        return X_aug, y_aug
+
+    def evaluate_model(self, model, X_test, y_test, num_classes):
+        """Evaluación exhaustiva con Matriz de Confusión y Curvas ROC (Criterio 3)"""
+        letters = ['A', 'B', 'C', 'D', 'H', 'L', 'O']
+        y_pred_probs = model.predict(X_test, verbose=0)
+        y_pred = np.argmax(y_pred_probs, axis=1)
+        y_true = np.argmax(y_test, axis=1)
+
+        # 1. Reporte de métricas (Precision, Recall, F1-Score)
+        print("\n=== REPORTE DE CLASIFICACIÓN DETALLADO ===")
+        print(classification_report(y_true, y_pred, target_names=letters[:num_classes]))
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+        # 2. Matriz de Confusión
+        cm = confusion_matrix(y_true, y_pred)
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=letters[:num_classes], yticklabels=letters[:num_classes], ax=ax1)
+        ax1.set_title('Matriz de Confusión')
+        ax1.set_xlabel('Predicción')
+        ax1.set_ylabel('Real')
+
+        # 3. Curvas ROC Multiclase
+        for i in range(num_classes):
+            fpr, tpr, _ = roc_curve(y_test[:, i], y_pred_probs[:, i])
+            roc_auc = auc(fpr, tpr)
+            ax2.plot(fpr, tpr, label=f'Letra {letters[i]} (AUC = {roc_auc:.2f})')
+
+        ax2.plot([0, 1], [0, 1], 'k--', lw=1)
+        ax2.set_title('Curvas ROC por Clase')
+        ax2.set_xlabel('Tasa de Falsos Positivos (FPR)')
+        ax2.set_ylabel('Tasa de Verdaderos Positivos (TPR)')
+        ax2.legend(loc='lower right')
+        ax2.grid(True)
+
         plt.tight_layout()
         plt.show()
 
